@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Admin Panel - NOBEDITz</title>
+
+  <link rel="stylesheet" href="/style.css">
+
+  <style>
+    .admin-container {
+      max-width: 900px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+
+    .admin-box {
+      background: #0d0d0d;
+      border: 1px solid #222;
+      border-radius: 14px;
+      padding: 25px;
+      margin-bottom: 25px;
+    }
+
+    .admin-box h2 {
+      margin-bottom: 20px;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 13px;
+      margin: 8px 0 15px;
+      background: #111;
+      color: white;
+      border: 1px solid #333;
+      border-radius: 7px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: #008cff;
+    }
+
+    .admin-btn {
+      padding: 12px 22px;
+      border: none;
+      border-radius: 7px;
+      background: #008cff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .delete-btn {
+      background: #d62828;
+      margin-top: 10px;
+    }
+
+    .logout-btn {
+      float: right;
+      background: #333;
+    }
+
+    .admin-product {
+      padding: 18px 0;
+      border-bottom: 1px solid #222;
+    }
+
+    .admin-product:last-child {
+      border-bottom: none;
+    }
+
+    .order {
+      padding: 15px 0;
+      border-bottom: 1px solid #222;
+      color: #aaa;
+      font-size: 14px;
+    }
+
+    .status-paid {
+      color: #00d084;
+      font-weight: bold;
+    }
+
+    .status-created {
+      color: #ffb703;
+      font-weight: bold;
+    }
+
+    #adminArea {
+      display: none;
+    }
+
+    #message {
+      margin-top: 15px;
+      color: #00aaff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="navbar">
+
+    <div class="logo">
+      NOB<span>EDITz</span>
+    </div>
+
+    <a href="/" style="color:white;text-decoration:none;">
+      ← Store
+    </a>
+
+  </header>
+
+
+  <main class="admin-container">
+
+    <!-- LOGIN -->
+    <div class="admin-box" id="loginArea">
+
+      <h2>Admin Login</h2>
+
+      <form id="loginForm">
+
+        <label>Username</label>
+
+        <input
+          type="text"
+          id="username"
+          placeholder="Admin username"
+          required
+        >
+
+        <label>Password</label>
+
+        <input
+          type="password"
+          id="password"
+          placeholder="Admin password"
+          required
+        >
+
+        <button class="admin-btn" type="submit">
+          Login
+        </button>
+
+      </form>
+
+      <div id="loginMessage"></div>
+
+    </div>
+
+
+    <!-- ADMIN AREA -->
+    <div id="adminArea">
+
+      <div class="admin-box">
+
+        <button
+          class="admin-btn logout-btn"
+          onclick="logout()"
+        >
+          Logout
+        </button>
+
+        <h2>Add XML Product</h2>
+
+        <form id="productForm">
+
+          <label>Product Name</label>
+
+          <input
+            type="text"
+            name="name"
+            placeholder="Example: Free Fire One Tap XML"
+            required
+          >
+
+
+          <label>Description</label>
+
+          <textarea
+            name="description"
+            placeholder="Describe your XML file..."
+          ></textarea>
+
+
+          <label>Price (₹)</label>
+
+          <input
+            type="number"
+            name="price"
+            placeholder="49"
+            min="1"
+            required
+          >
+
+
+          <label>XML File</label>
+
+          <input
+            type="file"
+            name="xml"
+            accept=".xml"
+            required
+          >
+
+
+          <button
+            class="admin-btn"
+            type="submit"
+          >
+            Upload XML
+          </button>
+
+        </form>
+
+        <div id="message"></div>
+
+      </div>
+
+
+      <!-- PRODUCTS -->
+      <div class="admin-box">
+
+        <h2>Products</h2>
+
+        <div id="products">
+          Loading...
+        </div>
+
+      </div>
+
+
+      <!-- ORDERS -->
+      <div class="admin-box">
+
+        <h2>Orders</h2>
+
+        <div id="orders">
+          Loading...
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <script>
+
+    const loginArea =
+      document.getElementById("loginArea");
+
+    const adminArea =
+      document.getElementById("adminArea");
+
+
+    // LOGIN
+
+    document
+      .getElementById("loginForm")
+      .addEventListener("submit", async function(e) {
+
+        e.preventDefault();
+
+        const username =
+          document.getElementById("username").value;
+
+        const password =
+          document.getElementById("password").value;
+
+
+        const response = await fetch(
+          "/api/admin/login",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+              username,
+              password
+            })
+          }
+        );
+
+
+        const data = await response.json();
+
+
+        if (data.success) {
+
+          loginArea.style.display = "none";
+
+          adminArea.style.display = "block";
+
+          loadProducts();
+
+          loadOrders();
+
+        } else {
+
+          document.getElementById(
+            "loginMessage"
+          ).textContent =
+            data.error || "Login failed.";
+
+        }
+
+      });
+
+
+    // UPLOAD PRODUCT
+
+    document
+      .getElementById("productForm")
+      .addEventListener("submit", async function(e) {
+
+        e.preventDefault();
+
+
+        const formData =
+          new FormData(this);
+
+
+        const response = await fetch(
+          "/api/admin/products",
+          {
+            method: "POST",
+            body: formData
+          }
+        );
+
+
+        const data =
+          await response.json();
+
+
+        if (data.success) {
+
+          document.getElementById(
+            "message"
+          ).textContent =
+            "XML uploaded successfully!";
+
+          this.reset();
+
+          loadProducts();
+
+        } else {
+
+          document.getElementById(
+            "message"
+          ).textContent =
+            data.error || "Upload failed.";
+
+        }
+
+      });
+
+
+    // LOAD PRODUCTS
+
+    async function loadProducts() {
+
+      const response = await fetch(
+        "/api/admin/products"
+      );
+
+
+      if (response.status === 401) {
+        return;
+      }
+
+
+      const products =
+        await response.json();
+
+
+      const container =
+        document.getElementById("products");
+
+
+      if (!products.length) {
+
+        container.innerHTML =
+          "<p>No products yet.</p>";
+
+        return;
+      }
+
+
+      container.innerHTML = "";
+
+
+      products.forEach(product => {
+
+        const div =
+          document.createElement("div");
+
+
+        div.className =
+          "admin-product";
+
+
+        div.innerHTML = `
+
+          <h3>${escapeHTML(product.name)}</h3>
+
+          <p>
+            ₹${Number(product.price).toFixed(0)}
+          </p>
+
+          <p>
+            ${escapeHTML(product.description || "")}
+          </p>
+
+          <button
+            class="admin-btn delete-btn"
+            onclick="deleteProduct(${product.id})"
+          >
+            Delete
+          </button>
+
+        `;
+
+
+        container.appendChild(div);
+
+      });
+
+    }
+
+
+    // DELETE PRODUCT
+
+    async function deleteProduct(id) {
+
+      if (!confirm(
+        "Are you sure you want to delete this product?"
+      )) {
+        return;
+      }
+
+
+      const response = await fetch(
+        "/api/admin/products/" + id,
+        {
+          method: "DELETE"
+        }
+      );
+
+
+      const data =
+        await response.json();
+
+
+      if (data.success) {
+
+        loadProducts();
+
+      } else {
+
+        alert(
+          data.error || "Delete failed."
+        );
+
+      }
+
+    }
+
+
+    // LOAD ORDERS
+
+    async function loadOrders() {
+
+      const response = await fetch(
+        "/api/admin/orders"
+      );
+
+
+      if (response.status === 401) {
+        return;
+      }
+
+
+      const orders =
+        await response.json();
+
+
+      const container =
+        document.getElementById("orders");
+
+
+      if (!orders.length) {
+
+        container.innerHTML =
+          "<p>No orders yet.</p>";
+
+        return;
+      }
+
+
+      container.innerHTML = "";
+
+
+      orders.forEach(order => {
+
+        const div =
+          document.createElement("div");
+
+
+        div.className = "order";
+
+
+        div.innerHTML = `
+
+          <strong>
+            ${escapeHTML(
+              order.product_name || "Unknown Product"
+            )}
+          </strong>
+
+          <br>
+
+          Order ID:
+          ${escapeHTML(
+            order.razorpay_order_id || "-"
+          )}
+
+          <br>
+
+          Payment ID:
+          ${escapeHTML(
+            order.razorpay_payment_id || "-"
+          )}
+
+          <br>
+
+          Status:
+          <span class="${
+            order.status === "paid"
+              ? "status-paid"
+              : "status-created"
+          }">
+            ${escapeHTML(order.status)}
+          </span>
+
+          <br>
+
+          Date:
+          ${escapeHTML(order.created_at)}
+
+        `;
+
+
+        container.appendChild(div);
+
+      });
+
+    }
+
+
+    // LOGOUT
+
+    async function logout() {
+
+      await fetch(
+        "/api/admin/logout",
+        {
+          method: "POST"
+        }
+      );
+
+      location.reload();
+
+    }
+
+
+    // SECURITY
+
+    function escapeHTML(value) {
+
+      const div =
+        document.createElement("div");
+
+      div.textContent = value;
+
+      return div.innerHTML;
+
+    }
+
+  </script>
+
+</body>
+</html>
