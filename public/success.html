@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Payment Successful - NOBEDITz</title>
+
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+  <section class="hero">
+
+    <div class="hero-content">
+
+      <div style="font-size:70px;">✓</div>
+
+      <p class="small-title">PAYMENT SUCCESSFUL</p>
+
+      <h1>NOB<span>EDITz</span></h1>
+
+      <h2>Your XML is Ready!</h2>
+
+      <p>
+        Thank you for your purchase.
+        Click the button below to download your XML file.
+      </p>
+
+      <a
+        id="downloadButton"
+        class="hero-btn"
+        href="#"
+      >
+        Download XML
+      </a>
+
+      <br><br>
+
+      <a href="/" style="color:#888;">
+        ← Back to Store
+      </a>
+
+    </div>
+
+  </section>
+
+
+  <script>
+
+    const params = new URLSearchParams(
+      window.location.search
+    );
+
+    const token = params.get("token");
+
+    const button =
+      document.getElementById("downloadButton");
+
+
+    if (token) {
+
+      button.href =
+        "/api/download/" +
+        encodeURIComponent(token);
+
+    } else {
+
+      button.style.display = "none";
+
+      const message =
+        document.createElement("p");
+
+      message.textContent =
+        "Download link is missing.";
+
+      message.style.color = "#ff5555";
+
+      button.parentElement.appendChild(
+        message
+      );
+    }
+
+  </script>
+
+</body>
+</html>
