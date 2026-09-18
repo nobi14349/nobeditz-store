@@ -1,0 +1,307 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #050505;
+  color: #ffffff;
+  line-height: 1.6;
+}
+
+/* NAVBAR */
+
+.navbar {
+  width: 100%;
+  padding: 18px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(5, 5, 5, 0.95);
+  border-bottom: 1px solid #151515;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.logo span {
+  color: #008cff;
+}
+
+nav {
+  display: flex;
+  gap: 25px;
+}
+
+nav a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+nav a:hover {
+  color: #008cff;
+}
+
+/* HERO */
+
+.hero {
+  min-height: 88vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 20px;
+
+  background:
+    radial-gradient(circle at center, rgba(0, 140, 255, 0.20), transparent 40%),
+    #050505;
+}
+
+.hero-content {
+  max-width: 850px;
+}
+
+.small-title {
+  color: #008cff;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 5px;
+  margin-bottom: 10px;
+}
+
+.hero h1 {
+  font-size: clamp(55px, 12vw, 120px);
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -5px;
+  text-shadow: 0 0 35px rgba(0, 140, 255, 0.45);
+}
+
+.hero h1 span {
+  color: #008cff;
+}
+
+.hero h2 {
+  margin-top: 25px;
+  font-size: clamp(20px, 4vw, 35px);
+}
+
+.hero p {
+  margin: 15px auto 30px;
+  max-width: 600px;
+  color: #aaaaaa;
+}
+
+.hero-btn,
+.contact-btn {
+  display: inline-block;
+  padding: 13px 28px;
+  background: #008cff;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+  box-shadow: 0 0 25px rgba(0, 140, 255, 0.35);
+  transition: 0.3s;
+}
+
+.hero-btn:hover,
+.contact-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 35px rgba(0, 140, 255, 0.6);
+}
+
+/* STORE */
+
+.store {
+  padding: 90px 7%;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 45px;
+}
+
+.section-title p {
+  color: #008cff;
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 3px;
+}
+
+.section-title h2 {
+  font-size: 38px;
+  margin-top: 5px;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 25px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.product-card {
+  background: #0d0d0d;
+  border: 1px solid #1d1d1d;
+  border-radius: 14px;
+  padding: 25px;
+  transition: 0.3s;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  border-color: #008cff;
+  box-shadow: 0 0 25px rgba(0, 140, 255, 0.18);
+}
+
+.product-card h3 {
+  font-size: 21px;
+  margin-bottom: 10px;
+}
+
+.product-card p {
+  color: #999999;
+  font-size: 14px;
+  min-height: 60px;
+}
+
+.price {
+  color: #008cff;
+  font-size: 27px;
+  font-weight: 900;
+  margin: 15px 0;
+}
+
+.buy-btn {
+  width: 100%;
+  border: none;
+  padding: 12px;
+  border-radius: 7px;
+  background: #008cff;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.buy-btn:hover {
+  background: #0074d4;
+}
+
+.loading {
+  text-align: center;
+  color: #888888;
+  grid-column: 1 / -1;
+}
+
+/* FEATURES */
+
+.features {
+  padding: 70px 7%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+  background: #080808;
+}
+
+.feature {
+  text-align: center;
+  padding: 30px 20px;
+}
+
+.feature-icon {
+  font-size: 35px;
+  margin-bottom: 12px;
+}
+
+.feature h3 {
+  margin-bottom: 8px;
+}
+
+.feature p {
+  color: #888888;
+  font-size: 14px;
+}
+
+/* CONTACT */
+
+.contact {
+  padding: 90px 7%;
+  text-align: center;
+}
+
+.contact > p {
+  color: #999999;
+  max-width: 600px;
+  margin: -20px auto 30px;
+}
+
+/* FOOTER */
+
+footer {
+  padding: 30px 7%;
+  border-top: 1px solid #171717;
+  text-align: center;
+}
+
+footer p {
+  margin-top: 8px;
+  color: #666666;
+  font-size: 13px;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+  .navbar {
+    padding: 15px 5%;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  nav {
+    gap: 12px;
+  }
+
+  nav a {
+    font-size: 12px;
+  }
+
+  .hero {
+    min-height: 80vh;
+  }
+
+  .hero h1 {
+    letter-spacing: -3px;
+  }
+
+  .store,
+  .contact {
+    padding: 65px 5%;
+  }
+
+  .section-title h2 {
+    font-size: 30px;
+  }
+}
